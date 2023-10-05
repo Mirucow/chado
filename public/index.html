@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <title>Chat app with socket.io</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/destyle.css@1.0.15/destyle.css"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="styles/index.css">
+  </head>
+  <body>
+    <div id="messages"></div>
+    <form id="chat">
+      <input id="input" type="text" placeholder="Message">
+      <button id="send" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      let username = Cookies.get('username');
+      if (!username) {
+        const inp = window.prompt('おなまえ（変更できない）');
+        Cookies.set('username', inp);
+        username = inp;
+      }
+
+      var socket = io();
+      var form = document.getElementById('chat');
+      var input = document.getElementById('input');
+      var messages = document.getElementById('messages');
+
+      socket.emit("oldMessages");
+      socket.emit('join', username);
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (input.value) {
+          socket.emit('message', [username, input.value]);
+          input.value = '';
+        }
+      });
+
+      socket.on('message', function([user, msg]) {
+        const item = document.createElement('li');
+        item.className = 'message';
+        const useritem = document.createElement('span');
+        useritem.className = 'user';
+        useritem.textContent = user;
+        const msgitem = document.createElement('span');
+        msgitem.className = 'msg';
+        msgitem.textContent = msg;
+        item.appendChild(useritem);
+        item.appendChild(msgitem);
+        messages.appendChild(item);
+        messages.scrollTo(0, messages.scrollHeight);
+      });
+
+      socket.on("oldMessages", function(msgs) {
+        msgs.forEach(function([user, msg]) {
+          const item = document.createElement('li');
+          item.className = 'message';
+          const useritem = document.createElement('span');
+          useritem.className = 'user';
+          useritem.textContent = user;
+          const msgitem = document.createElement('span');
+          msgitem.className = 'msg';
+          msgitem.textContent = msg;
+          item.appendChild(useritem);
+          item.appendChild(msgitem);
+          messages.appendChild(item);
+        });
+        messages.scrollTo(0, messages.scrollHeight);
+      });
+
+      socket.on('join', function(user) {
+        const item = document.createElement('li');
+        item.className = 'join';
+        item.textContent = user + ' が中に入った';
+        messages.appendChild(item);
+        messages.scrollTo(0, messages.scrollHeight);
+      });
+    </script>
+  </body>
+</html>

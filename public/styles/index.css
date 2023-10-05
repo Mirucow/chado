@@ -1,0 +1,46 @@
+#messages {
+  height: calc(100% - 30px);
+  overflow-y: scroll;
+  list-style: none;
+  background-color: #6c6c6c;
+}
+
+.join {
+  padding: 10px 5px;
+  color: bisque;
+  font-weight: bold;
+}
+
+.message {
+  padding: 10px 5px;
+  color: white;
+}
+
+.user {
+  font-weight: bold;
+}
+
+.msg {
+  padding: 5px;
+}
+
+#chat {
+  height: 30px;
+  border-top: 1px solid gray;
+}
+
+#input {
+  padding: 10px;
+  border-right: 1px solid gray;
+  height: 100%;
+  width: calc(100% - 40px);
+  float: left;
+}
+
+#send {
+  display: grid;
+  place-items: center;
+  background-color: gainsboro;
+  height: 100%;
+  width: 40px;
+}
