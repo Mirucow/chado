@@ -13,12 +13,12 @@
     <form id="chat">
       <input id="input" type="text" placeholder="Message">
       <button id="send" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
-    </div>
+    </form>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
       let username = Cookies.get('username');
-      if (!username) {
+      if (!username || username == null) {
         const inp = window.prompt('おなまえ（変更できない）');
         Cookies.set('username', inp);
         username = inp;
@@ -79,6 +79,6 @@
         messages.appendChild(item);
         messages.scrollTo(0, messages.scrollHeight);
       });
-    </script>
+    </script>,
   </body>
 </html>
